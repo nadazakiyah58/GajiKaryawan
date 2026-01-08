@@ -1,135 +1,105 @@
 <!DOCTYPE html>
-<html lang="id">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Hitung Gaji Karyawan - UAS PWD</title>
+    <title>Hitung Gaji Karyawan</title>
     <style>
-        /* Pengaturan Layout Utama */
-        .main-table {
-            width: 720px;
+        table {
+            width: 700px;
             border-collapse: collapse;
-            font-family: 'Times New Roman', Times, serif;
-            margin: 30px auto;
-            border: 1px solid #000;
+            font-family: 'Times New Roman', serif;
+            margin: 20px auto;
         }
-
-        .main-table th {
-            background-color: #f2f2f2;
-            border: 1px solid #000;
-            padding: 12px;
-            text-align: center;
-            font-size: 18px;
-        }
-
-        .main-table td {
-            border: 1px solid #000;
-            padding: 20px;
+        th, td {
+            border: 1px solid black;
+            padding: 15px;
             vertical-align: top;
         }
-
-        /* Styling Form Input */
-        .title-label {
-            font-size: 22px;
+        th {
+            text-align: center;
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 15px;
-            display: block;
         }
-
-        .field-box {
-            margin-bottom: 12px;
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .input-group {
+            margin-bottom: 10px;
             font-size: 15px;
         }
-
-        .field-box input {
-            width: 170px;
-            padding: 4px;
-            border: 1px solid #777;
-        }
-
-        .btn-calc {
-            margin-top: 10px;
-            padding: 6px 15px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        /* Styling Output Area */
-        .result-item {
+        /* Bagian ini diatur agar TIDAK BOLD */
+        .output-row {
             font-size: 18px;
-            margin-bottom: 15px;
-            font-weight: normal; /* Sesuai permintaan: Tidak Bold */
-            display: block;
+            margin-bottom: 12px;
+            font-weight: normal; /* Mengubah teks menjadi tidak tebal */
         }
-
-        .result-item span {
-            color: #000;
+        input {
+            padding: 2px;
+            font-size: 14px;
+            width: 160px;
+        }
+        button {
+            padding: 4px 10px;
+            cursor: pointer;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <table class="main-table">
+    <table>
         <thead>
             <tr>
-                <th width="50%">INPUTAN DATA</th>
-                <th width="50%">HASIL OUTPUT</th>
+                <th width="50%">INPUTAN</th>
+                <th width="50%">OUTPUT</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>
-                    <span class="title-label">Kalkulator Gaji</span>
-                    
-                    <div class="field-box">
-                        Gaji Pokok (Rp): <br>
-                        <input type="number" id="gajiPokok" placeholder="Masukan nominal...">
+                    <h1>Hitung Gaji Karyawan</h1>
+                    <div class="input-group">
+                        Gaji Pokok (Rp): <input type="number" id="gajiPokok" placeholder="Contoh: 5000000">
                     </div>
-
-                    <div class="field-box">
-                        Jumlah Jam Lembur: <br>
-                        <input type="number" id="jamLembur" placeholder="Masukan jam...">
+                    <div class="input-group">
+                        Jumlah Jam Lembur: <input type="number" id="jamLembur" placeholder="Contoh: 20">
                     </div>
-
-                    <button class="btn-calc" onclick="prosesHitung()">Proses Perhitungan</button>
+                    <br>
+                    <button onclick="prosesHitung()">Hitung Gaji</button>
                 </td>
 
                 <td>
-                    <div class="result-item">Gaji Pokok: <span id="resGajiPokok">-</span></div>
-                    <div class="result-item">Total Gaji Lembur: <span id="resLembur">-</span></div>
-                    <div class="result-item">Gaji Kotor: <span id="resKotor">-</span></div>
-                    <div class="result-item">Pajak: <span id="resPajak">-</span></div>
-                    <div class="result-item">Gaji Bersih: <span id="resBersih">-</span></div>
+                    <div class="output-row">Gaji Pokok: <span id="resGajiPokok"></span></div>
+                    <div class="output-row">Total Gaji Lembur: <span id="resLembur"></span></div>
+                    <div class="output-row">Gaji Kotor: <span id="resKotor"></span></div>
+                    <div class="output-row">Pajak: <span id="resPajak"></span></div>
+                    <div class="output-row">Gaji Bersih: <span id="resBersih"></span></div>
                 </td>
             </tr>
         </tbody>
     </table>
 
     <script>
-        // Fungsi pemformat mata uang
-        const formatIDR = (num) => {
-            return "Rp " + num.toLocaleString('id-ID').replace(/,/g, '.');
-        };
+        function formatRupiah(angka) {
+            return "Rp " + angka.toLocaleString('id-ID').replace(/,/g, '.');
+        }
 
         function prosesHitung() {
-            // Pengambilan data input
-            const valGaji = document.getElementById('gajiPokok').value;
-            const valLembur = document.getElementById('jamLembur').value;
+            const inputGaji = document.getElementById('gajiPokok').value;
+            const inputLembur = document.getElementById('jamLembur').value;
 
-            // Validasi sederhana
-            if (!valGaji || !valLembur) {
-                alert("Mohon lengkapi semua data input!");
+            if (inputGaji === "" || inputLembur === "") {
+                alert("Harap isi semua inputan!");
                 return;
             }
 
-            // Deklarasi variabel perhitungan
-            const gajiPokok = parseFloat(valGaji);
-            const jamLembur = parseFloat(valLembur);
+            const gajiPokok = parseFloat(inputGaji);
+            const jamLembur = parseFloat(inputLembur);
 
-            // Logika Perhitungan
             const totalLembur = jamLembur * 20000;
             const gajiKotor = gajiPokok + totalLembur;
 
-            // Logika Penentuan Pajak
             let pajakPersen = 0;
             if (gajiKotor < 5000000) {
                 pajakPersen = 0.05;
@@ -142,12 +112,12 @@
             const totalPajak = gajiKotor * pajakPersen;
             const gajiBersih = gajiKotor - totalPajak;
 
-            // Render hasil ke layar (Output)
-            document.getElementById('resGajiPokok').textContent = formatIDR(gajiPokok);
-            document.getElementById('resLembur').textContent = formatIDR(totalLembur);
-            document.getElementById('resKotor').textContent = formatIDR(gajiKotor);
-            document.getElementById('resPajak').textContent = formatIDR(totalPajak);
-            document.getElementById('resBersih').textContent = formatIDR(gajiBersih);
+            // Menampilkan hasil tanpa cetak tebal
+            document.getElementById('resGajiPokok').innerText = formatRupiah(gajiPokok);
+            document.getElementById('resLembur').innerText = formatRupiah(totalLembur);
+            document.getElementById('resKotor').innerText = formatRupiah(gajiKotor);
+            document.getElementById('resPajak').innerText = formatRupiah(totalPajak);
+            document.getElementById('resBersih').innerText = formatRupiah(gajiBersih);
         }
     </script>
 
